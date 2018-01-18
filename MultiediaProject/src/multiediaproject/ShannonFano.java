@@ -25,29 +25,18 @@ class ShannonFano {
 	private int originalStringLength;
 	private HashMap<Character, String> compressedResult;
 	private HashMap<Character, Double> characterFrequency;
-	private double entropy;
-	private double averageLengthBefore;
-	private double averageLengthAfter;
 	private boolean probabilityIsGiven;
         private byte[] Result;
 
 	public ShannonFano(String str) {
-		super();
 		originalString = str;
 		originalStringLength = str.length();
 		characterFrequency = new HashMap<Character, Double>();
 		compressedResult = new HashMap<Character, String>();
-		entropy = 0.0;
-		averageLengthBefore = 0.0;
-		averageLengthAfter = 0.0;
 		probabilityIsGiven = false;
 
 		this.calculateFrequency();
 		this.compressString();
-		//this.calculateEntropy();
-		//this.calculateAverageLengthBeforeCompression();
-		//this.calculateAverageLengthAfterCompression();
-                
 	}
         
         public HashMap<Character, String> getMapResult(){
@@ -104,42 +93,8 @@ class ShannonFano {
 			}
 		}
 	}
-
-	private void calculateEntropy() {
-		double probability = 0.0;
-		for (Character c : originalString.toCharArray()) {
-			probability = 1.0 * characterFrequency.get(c) / originalStringLength;
-			entropy += probability * (Math.log(1.0 / probability) / Math.log(2));
-		}
-	}
-
-	private void calculateAverageLengthBeforeCompression() {
-		double probability = 0.0;
-		for (Character c : originalString.toCharArray()) {
-			probability = 1.0 * characterFrequency.get(c) / originalStringLength;
-			averageLengthBefore += probability * ASCII_LENGTH;
-		}
-	}
-
-	private void calculateAverageLengthAfterCompression() {
-		double probability = 0.0;
-		for (Character c : originalString.toCharArray()) {
-			probability = 1.0 * characterFrequency.get(c) / originalStringLength;
-			averageLengthAfter += probability * compressedResult.get(c).length();
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public HashMap<Character, Double> getCharacterFrequency() {
-		return (HashMap<Character, Double>) characterFrequency.clone();
-	}
-
-	@SuppressWarnings("unchecked")
-	public HashMap<Character, String> getCompressedResult() {
-		return (HashMap<Character, String>) compressedResult.clone();
-	}
-
-	@Override
+        
+        @Override
 	public String toString() {
             String str = "";
             

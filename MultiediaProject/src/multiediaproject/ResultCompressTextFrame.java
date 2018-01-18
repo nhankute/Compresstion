@@ -23,9 +23,9 @@ public class ResultCompressTextFrame extends javax.swing.JFrame {
     private String input_text;
     
     private String percentage_Shannon = "";
-    private String percentage_Huffman = "";
+    private String percentage_Huffman = "0";
     private String percentage_RLC = "";
-    private String percentage_LZW = "";
+    private String percentage_LZW = "0";
     
     private Integer original_size;
     private String shannon_size;
@@ -51,18 +51,18 @@ public class ResultCompressTextFrame extends javax.swing.JFrame {
     
     private void RankColor(){
         if(this.percentage_Huffman != "")
-        if(Integer.parseInt(this.percentage_Huffman) >= 90){
+        if(Double.parseDouble(this.percentage_Huffman) >= 90){
             this.pgb_Huffman.setForeground(Color.RED);
-        }else if(Integer.parseInt(this.percentage_Huffman) > 55 && Integer.parseInt(this.percentage_Huffman) < 90){
+        }else if(Double.parseDouble(this.percentage_Huffman) > 55 && Integer.parseInt(this.percentage_Huffman) < 90){
             this.pgb_Huffman.setForeground(Color.YELLOW);
         }else{
             this.pgb_Huffman.setForeground(Color.GREEN);
         }
         
         if(this.percentage_LZW != "")
-        if(Integer.parseInt(this.percentage_LZW) >= 90){
+        if(Double.parseDouble(this.percentage_LZW) >= 90){
             this.pgb_LZW.setForeground(Color.RED);
-        }else if(Integer.parseInt(this.percentage_LZW) > 55 && Integer.parseInt(this.percentage_LZW) < 90){
+        }else if(Double.parseDouble(this.percentage_LZW) > 55 && Integer.parseInt(this.percentage_LZW) < 90){
             this.pgb_LZW.setForeground(Color.YELLOW);
         }else{
             this.pgb_LZW.setForeground(Color.GREEN);
@@ -78,9 +78,9 @@ public class ResultCompressTextFrame extends javax.swing.JFrame {
         }
         
         if(this.percentage_RLC != "")
-        if(Integer.parseInt(this.percentage_RLC) >= 90){
+        if(Double.parseDouble(this.percentage_RLC) >= 90){
             this.pgb_RLC.setForeground(Color.RED);
-        }else if(Integer.parseInt(this.percentage_RLC) > 55 && Integer.parseInt(this.percentage_RLC) < 90){
+        }else if(Double.parseDouble(this.percentage_RLC) > 55 && Integer.parseInt(this.percentage_RLC) < 90){
             this.pgb_RLC.setForeground(Color.YELLOW);
         }else{
             this.pgb_RLC.setForeground(Color.GREEN);
@@ -131,10 +131,10 @@ public class ResultCompressTextFrame extends javax.swing.JFrame {
         jPanel4.setBackground(new java.awt.Color(227, 224, 224));
         jPanel4.setForeground(new java.awt.Color(3, 3, 3));
 
-        jLabel2.setFont(new java.awt.Font("Ubuntu Light", 0, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Ubuntu Light", 1, 18)); // NOI18N
         jLabel2.setText("  " + file_name);
 
-        jLabel3.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText(file_size);
 
@@ -187,6 +187,7 @@ public class ResultCompressTextFrame extends javax.swing.JFrame {
 
         jLabel4.setText("  Run length coding");
 
+        pgb_RLC.setValue((int) Double.parseDouble(this.percentage_RLC));
         pgb_RLC.setString(this.percentage_RLC + "%");
         pgb_RLC.setStringPainted(true);
 
@@ -250,6 +251,7 @@ public class ResultCompressTextFrame extends javax.swing.JFrame {
 
         jLabel6.setText("  Huffman");
 
+        pgb_Huffman.setValue((int) Double.parseDouble(this.percentage_Huffman));
         pgb_Huffman.setString(this.percentage_Huffman + "%");
         pgb_Huffman.setStringPainted(true);
 
@@ -282,6 +284,7 @@ public class ResultCompressTextFrame extends javax.swing.JFrame {
         jLabel7.setText("  LZW");
 
         pgb_LZW.setBackground(new java.awt.Color(254, 254, 254));
+        pgb_LZW.setValue((int) Double.parseDouble(this.percentage_LZW));
         pgb_LZW.setString(this.percentage_LZW + "%");
         pgb_LZW.setStringPainted(true);
 
@@ -406,10 +409,28 @@ public class ResultCompressTextFrame extends javax.swing.JFrame {
         } else if(snsize >= 1000000){
             this.shannon_size = String.valueOf((double)snsize/1000000.0) + "Mb";
         }
-//Huffman
-        
 //RLC
-
+        output = new File(CurrenDirection +"_RLC_compressed.txt");
+        fos = new FileOutputStream(output);
+        
+        RLC rlcc = new RLC(input);
+        data = rlcc.toString().getBytes();
+        fos.write(data);
+        fos.flush();
+        fos.close();
+        
+        this.RLC_size = String.valueOf(output.length());
+        snsize = Double.parseDouble(this.RLC_size);
+        this.percentage_RLC = String.valueOf(Math.round(((snsize*100.0) / (double)this.original_size) *100) / 100.00);
+        if(snsize < 1000.0){
+            this.RLC_size += "bytes";
+        } else if(snsize >= 1000 && snsize < 1000000){
+            this.RLC_size = String.valueOf((double)snsize/1000.0*10/10) + "Kb";
+        } else if(snsize >= 1000000){
+            this.RLC_size = String.valueOf((double)snsize/1000000.0) + "Mb";
+        }
+//Huffman
+ 
 //LZW
 
     }

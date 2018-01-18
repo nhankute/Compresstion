@@ -43,7 +43,7 @@ public class MainFrame extends javax.swing.JFrame {
         img =  null;
         input_text = "";
         output_text = "";
-        IMAGE_VIEW = "Selec an image";
+        IMAGE_VIEW = "Selec a TEXT or an IMAGE";
         TextFileChooser = null;
         initComponents();
     }
@@ -461,7 +461,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btDecompressMouseClicked
 
     private void btRefreshMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btRefreshMouseClicked
-        IMAGE_VIEW = "Selec an image";
+        IMAGE_VIEW = "Selec a TEXT or an IMAGE";
         this.lbImg.setText(this.IMAGE_VIEW);
         img = null;
         input_text = "";
