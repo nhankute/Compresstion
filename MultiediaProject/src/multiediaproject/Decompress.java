@@ -26,9 +26,9 @@ public class Decompress {
 
     private void DecompressString() {
         String str = "";
-        int count;
         switch (encode.toCharArray()[0]){
             case 'R':
+                int count;
                 Type_compress += "RLC";
                 encode = encode.substring(1,encode.length());
                 String[] Split;
@@ -61,32 +61,120 @@ public class Decompress {
                 break;
             case 'S':
                 Type_compress += "Shannon";
-                
+                encode = encode.substring(1);
+		String BinaryCode = encode.split(" ",2)[0];
+                String TableCode = encode.split(" ",2)[1];
+                while(TableCode.charAt(1)!='-'){
+                    BinaryCode += " " +TableCode.split(" ",2)[0];
+                    TableCode = TableCode.split(" ",2)[1];
+                }
+                temp = "";
+                count = Integer.parseInt(BinaryCode.substring(0,1));
+                if(count == 8)
+                    count = 0;
+                BinaryCode = BinaryCode.substring(1);
+                boolean Turn = true;
+                HashMap<String , Character> buffer = new HashMap<String , Character>();
+
+                for(int i = TableCode.length() - 1; i > 0; i--){
+                    if(TableCode.charAt(i) != ' '){
+                        if(TableCode.charAt(i) == '-')
+                            Turn = false;
+                        else{
+                            if(Turn == true)
+                                temp += TableCode.charAt(i);
+                            else{
+                                temp = new StringBuffer(temp).reverse().toString();
+                                buffer.put(temp, TableCode.charAt(i));
+                            }
+                        }
+                    }else{
+                        if(TableCode.charAt(i-1) == ' '){
+                                temp = new StringBuffer(temp).reverse().toString();
+                                buffer.put(temp, TableCode.charAt(i));
+                        }
+                        else{
+                            Turn = true;
+                            //c[count] = temp;
+                            temp = "";
+                        }
+                    }
+                }
+                temp = new StringBuffer(temp).reverse().toString();
+                buffer.put(temp, TableCode.charAt(0));
+
+                String Binary = convertStringToBinaryString(BinaryCode);
+
+                Binary = Binary.substring(count);
+                    str = "";
+                    String c1 = "";
+                    for(Character c : Binary.toCharArray()){
+                            c1 = c1 + Character.toString(c) ;
+                            if(buffer.containsKey(c1)){
+                                    str += buffer.get(c1);
+                                    c1 = "";	
+                            }		
+                    }
                 break;
             case 'L':
                 Type_compress += "LZW";
                 break;
             case 'H':
                 Type_compress += "Huffman";
-                encode = encode.substring(1,encode.length());
-		HashMap<String , String> buffer = new HashMap<String , String>();
-                String Input;
-                for(String c : encode.split("\n")){
-                    if(c.contains("-")){
-                        Split = c.split("-",2);
-                        buffer.put(Split[1], Split[0]);
-                    }else {
-                        Input = c;
+                encode = encode.substring(1);
+		BinaryCode = encode.split(" ",2)[0];
+                TableCode = encode.split(" ",2)[1];
+                while(TableCode.charAt(1) != '-'){
+                    BinaryCode += " " +TableCode.split(" ",2)[0];
+                    TableCode = TableCode.split(" ",2)[1];
+                }
+                temp = "";
+                count = Integer.parseInt(BinaryCode.substring(0,1));
+                if(count == 8)
+                    count = 0;
+                BinaryCode = BinaryCode.substring(1);
+                Turn = true;
+                buffer = new HashMap<String , Character>();
+
+                for(int i = TableCode.length() - 1; i > 0; i--){
+                    if(TableCode.charAt(i) != ' '){
+                        if(TableCode.charAt(i) == '-')
+                            Turn = false;
+                        else{
+                            if(Turn == true)
+                                temp += TableCode.charAt(i);
+                            else{
+                                temp = new StringBuffer(temp).reverse().toString();
+                                buffer.put(temp, TableCode.charAt(i));
+                            }
+                        }
+                    }else{
+                        if(TableCode.charAt(i-1) == ' '){
+                                temp = new StringBuffer(temp).reverse().toString();
+                                buffer.put(temp, TableCode.charAt(i));
+                        }
+                        else{
+                            Turn = true;
+                            //c[count] = temp;
+                            temp = "";
+                        }
                     }
                 }
-                String c1 = "";
-		for(Character c : encode.toCharArray()){
-			c1 = c1 + Character.toString(c) ;
-			if(buffer.containsKey(c1)){
-				str += buffer.get(c1);
-				c1 = "";	
-			}		
-		}
+                temp = new StringBuffer(temp).reverse().toString();
+                buffer.put(temp, TableCode.charAt(0));
+
+                Binary = convertStringToBinaryString(BinaryCode);
+
+                Binary = Binary.substring(count);
+                    str = "";
+                    c1 = "";
+                    for(Character c : Binary.toCharArray()){
+                            c1 = c1 + Character.toString(c) ;
+                            if(buffer.containsKey(c1)){
+                                    str += buffer.get(c1);
+                                    c1 = "";	
+                            }		
+                    }
                 break;
             default :
                 Type_compress += null;
@@ -104,4 +192,18 @@ public class Decompress {
     public String toString(){
         return this.decode;
     }
+    
+    public static String convertStringToBinaryString(String string){
+            String sb = "";
+            String str = "";
+            for(Character c : string.toCharArray()){
+                sb += Integer.toBinaryString((int) c);
+                while(sb.length()%8 != 0){
+                    sb = "0" + sb;
+                }
+                str += sb;
+                sb = "";
+            }
+            return str;
+        }
 }

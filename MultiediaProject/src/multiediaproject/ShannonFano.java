@@ -98,11 +98,6 @@ class ShannonFano {
 	public String toString() {
             String str = "S";
             int count = 0;
-            for (Character c : compressedResult.keySet()) {
-                str += c;
-                str += "-" + compressedResult.get(c) + "\n";
-            }
-            System.out.print(str);
             String result = "";
             for (Character c : originalString.toCharArray()) {
                 result += this.compressedResult.get(c);
@@ -111,11 +106,25 @@ class ShannonFano {
                 count++;
                 result = "0" + result;
             }
+            if(count == 0){
+                count = 8;
+            }
             System.out.println(String.valueOf(count) + result);
             result = convertBinaryStringToString(result);
             str += String.valueOf(count) + result;
+            for (Character c : compressedResult.keySet()) {
+                str += " ";
+                str += c;
+                str += "-" + compressedResult.get(c);
+            }
+            System.out.print(str);
             return str;
-        }
+        }        
+        
+	@SuppressWarnings("unchecked")
+	public HashMap<Character, String> getCompressedResult() {
+		return (HashMap<Character, String>) compressedResult.clone();
+	}
 
         public static String convertBinaryStringToString(String string){
             StringBuilder sb = new StringBuilder();

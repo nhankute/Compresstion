@@ -492,7 +492,7 @@ public class MainFrame extends javax.swing.JFrame {
 
                     this.IMAGE_VIEW = "Decode " + decode.getType();
                     this.TextFileChooser = file_selected;
-                    this.lbImg.setText(this.IMAGE_VIEW + ": New size: " + decode.toString().length());
+                    this.lbImg.setText(this.IMAGE_VIEW + " Success!!");
                 }
                 else{
                     //this.IMAGE_VIEW = decode.toString();

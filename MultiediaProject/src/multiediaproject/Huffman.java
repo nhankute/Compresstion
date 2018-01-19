@@ -3,9 +3,10 @@ package multiediaproject;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class Huffman {
-	private String ResultString;
+        private String ResultString;
 	private String originalString;
 	private int originalStringLength;
 	private HashMap<Character, String   > Result;
@@ -111,24 +112,27 @@ public class Huffman {
 	public String toString(){
             String str = "H";
             int count = 0;
-            for(Character c : Result.keySet()){
-                str += c;
-                str += "-";
-                str += Result.get(c);
-                str += "\n";
-            }
             while (this.ResultString.length() % 8 != 0){
                 count++;
                 this.ResultString = "0" + this.ResultString;
             }
-            System.out.println(str + String.valueOf(count) + this.ResultString);
+            if(count == 0){
+                count = 8;
+            }
             str += String.valueOf(count) + convertBinaryStringToString(this.ResultString);
+            for(Character c : Result.keySet()){
+                str += " ";
+                str += c;
+                str += "-";
+                str += Result.get(c);
+            }
+            System.out.println(str);
             return str;
 	}
         
         public static String convertBinaryStringToString(String string){
             StringBuilder sb = new StringBuilder();
-            char[] chars = string.replaceAll("\\s", "").toCharArray();
+            char[] chars = string.toCharArray();
             int [] mapping = {1,2,4,8,16,32,64,128};
 
             for (int j = 0; j < chars.length; j+=8) {
@@ -146,23 +150,62 @@ public class Huffman {
             return sb.toString();
         }
         
-        public String getCodeDecoded(){
-		HashMap<String , Character> buffer = new HashMap<String , Character>();
-		
-                
-                
-		for(Character c : this.Result.keySet()){
-            		buffer.put(this.Result.get(c),c);
-        	}
-		String result = "";
+        
+        /*
+        public String getCodeDecoded(String encode){
+            String BinaryCode = encode.split(" ",2)[0];
+            String TableCode = encode.split(" ",2)[1];
+            if(TableCode.charAt(1)!='-'){
+                BinaryCode += " " +TableCode.split(" ",2)[0];
+                TableCode = TableCode.split(" ",2)[1];
+            }
+            String temp = "";
+            int count = Integer.parseInt(BinaryCode.substring(0,1));
+            if(count == 8)
+                count = 0;
+            BinaryCode = BinaryCode.substring(1);
+            boolean Turn = true;
+            HashMap<String , Character> buffer = new HashMap<String , Character>();
+            
+            for(int i = TableCode.length() - 1; i > 0; i--){
+                    if(TableCode.charAt(i) != ' '){
+                        if(TableCode.charAt(i) == '-')
+                            Turn = false;
+                        else{
+                            if(Turn == true)
+                                temp += TableCode.charAt(i);
+                            else{
+                                temp = new StringBuffer(temp).reverse().toString();
+                                buffer.put(temp, TableCode.charAt(i));
+                            }
+                        }
+                    }else{
+                        if(TableCode.charAt(i-1) == ' '){
+                                temp = new StringBuffer(temp).reverse().toString();
+                                buffer.put(temp, TableCode.charAt(i));
+                        }
+                        else{
+                            Turn = true;
+                            //c[count] = temp;
+                            temp = "";
+                        }
+                    }
+                }
+                temp = new StringBuffer(temp).reverse().toString();
+                buffer.put(temp, TableCode.charAt(0));
+            
+            String Binary = convertStringToBinaryString(BinaryCode);
+            
+            Binary = Binary.substring(count);
+		String str = "";
 		String c1 = "";
-		for(Character c : ResultString.toCharArray()){
+		for(Character c : Binary.toCharArray()){
 			c1 = c1 + Character.toString(c) ;
 			if(buffer.containsKey(c1)){
-				result += buffer.get(c1);
+				str += buffer.get(c1);
 				c1 = "";	
 			}		
 		}
-		return result;
-	}
+		return str;
+	}*/
 }
