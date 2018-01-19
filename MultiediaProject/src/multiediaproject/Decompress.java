@@ -6,6 +6,7 @@
 package multiediaproject;
 
 import java.util.HashMap;
+import java.util.Vector;
 
 /**
  *
@@ -14,7 +15,7 @@ import java.util.HashMap;
 public class Decompress {
     private String encode;
     private String decode;
-    private String Type_compress = "_decode_";
+    private String Type_compress = "";
     private String Result;
     
     public Decompress(String str){
@@ -31,7 +32,25 @@ public class Decompress {
                 Type_compress += "RLC";
                 encode = encode.substring(1,encode.length());
                 String[] Split;
-                for(String c : encode.split(" ")){
+                Vector<String> SplitEncode = new Vector<>();
+                String temp = "";
+                for(int i = 0; i < encode.length()-1; i++){
+                    if(encode.charAt(i) != ' '){
+                        temp += encode.charAt(i);
+                    }else{
+                        if(encode.charAt(i+1) == ' '){
+                            temp += encode.charAt(i);
+                        }
+                        else{
+                            SplitEncode.add(temp);
+                            //c[count] = temp;
+                            temp = "";
+                        }
+                    }
+                }
+                temp += encode.charAt(encode.length() - 1);
+                SplitEncode.add(temp);
+                for(String c : SplitEncode){
                     Split = c.split("-",2);
                     count = Integer.parseInt(Split[0]);
                     while (count > 0){
@@ -42,6 +61,7 @@ public class Decompress {
                 break;
             case 'S':
                 Type_compress += "Shannon";
+                
                 break;
             case 'L':
                 Type_compress += "LZW";

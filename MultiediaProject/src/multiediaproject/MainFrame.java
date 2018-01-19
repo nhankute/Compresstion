@@ -319,6 +319,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
             else if(result == JFileChooser.CANCEL_OPTION) {
                 System.out.println("No file selec");
+                this.lbImg.setText(this.IMAGE_VIEW);
             }
         }
         else{//show image
@@ -438,6 +439,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btSelecTextMouseClicked
 
     private void btDecompressMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btDecompressMouseClicked
+        this.lbImg.setText(this.IMAGE_VIEW);
         JFileChooser chooser = new JFileChooser();
         chooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         FileNameExtensionFilter filter = new FileNameExtensionFilter("*.Text","txt");
@@ -472,8 +474,9 @@ public class MainFrame extends javax.swing.JFrame {
                 if(decode.toString() != "Sir, we can't decode this file"){
                     File output;
                     FileOutputStream fos;
-                    String NewName = file_selected.getName().substring(0,file_selected.getName().length() - 4) + decode.getType() + ".txt";
+                    String NewName = decode.getType() + "_Decode_" + file_selected.getName();
                     byte[] data = decode.toString().getBytes();
+                    System.out.println("\nDecode :" + decode.toString());
                     output = new File(NewName);
                     try {
                         fos = new FileOutputStream(output);
@@ -487,13 +490,13 @@ public class MainFrame extends javax.swing.JFrame {
                     }
 
 
-                    this.IMAGE_VIEW = "Result decode :" + NewName;
+                    this.IMAGE_VIEW = "Decode " + decode.getType();
                     this.TextFileChooser = file_selected;
-                    this.lbImg.setText(this.IMAGE_VIEW + "\r\nNew size: " + decode.toString().length());
+                    this.lbImg.setText(this.IMAGE_VIEW + ": New size: " + decode.toString().length());
                 }
                 else{
-                    this.IMAGE_VIEW = decode.toString();
-                    this.lbImg.setText(this.IMAGE_VIEW);
+                    //this.IMAGE_VIEW = decode.toString();
+                    this.lbImg.setText(decode.toString());
                 }
             }
             else {//Choo file again
@@ -516,6 +519,8 @@ public class MainFrame extends javax.swing.JFrame {
         else if(result == JFileChooser.CANCEL_OPTION) {//Not choose anything
             System.out.println("No file selec");
         }
+        this.input_text = "";
+        this.img = null;
     }//GEN-LAST:event_btDecompressMouseClicked
 
     private void btRefreshMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btRefreshMouseClicked
