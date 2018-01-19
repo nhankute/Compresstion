@@ -408,7 +408,7 @@ public class ResultCompressTextFrame extends javax.swing.JFrame {
         if(snsize < 1000.0){
             this.shannon_size += "bytes";
         } else if(snsize >= 1000 && snsize < 1000000){
-            this.shannon_size = String.valueOf((double)snsize/1000.0*10/10) + "Kb";
+            this.shannon_size = String.valueOf((double)snsize/1000.0) + "Kb";
         } else if(snsize >= 1000000){
             this.shannon_size = String.valueOf((double)snsize/1000000.0) + "Mb";
         }
@@ -428,7 +428,7 @@ public class ResultCompressTextFrame extends javax.swing.JFrame {
         if(snsize < 1000.0){
             this.RLC_size += "bytes";
         } else if(snsize >= 1000 && snsize < 1000000){
-            this.RLC_size = String.valueOf((double)snsize/1000.0*10/10) + "Kb";
+            this.RLC_size = String.valueOf((double)snsize/1000.0) + "Kb";
         } else if(snsize >= 1000000){
             this.RLC_size = String.valueOf((double)snsize/1000000.0) + "Mb";
         }
@@ -448,12 +448,12 @@ public class ResultCompressTextFrame extends javax.swing.JFrame {
         if(snsize < 1000.0){
             this.huffman_size += "bytes";
         } else if(snsize >= 1000 && snsize < 1000000){
-            this.huffman_size = String.valueOf((double)snsize/1000.0*10/10) + "Kb";
+            this.huffman_size = String.valueOf((double)snsize/1000.0) + "Kb";
         } else if(snsize >= 1000000){
             this.huffman_size = String.valueOf((double)snsize/1000000.0) + "Mb";
         }
 //LZW
-        output = new File(CurrenDirection +"_Huffman_compressed.txt");
+        output = new File(CurrenDirection +"_LZW_compressed.txt");
         fos = new FileOutputStream(output);
         
         LZW lzw = new LZW(input);
@@ -464,11 +464,11 @@ public class ResultCompressTextFrame extends javax.swing.JFrame {
         
         this.LZW_size = String.valueOf(output.length());
         snsize = Double.parseDouble(this.LZW_size);
-        this.percentage_LZW = String.valueOf(Math.round(((snsize*100.0) / (double)this.original_size) *100) / 100.00);
+        this.percentage_LZW = String.valueOf(Math.round(((snsize*100.0) / (double)this.original_size) *100.00) / 100.00);
         if(snsize < 1000.0){
             this.LZW_size += "bytes";
         } else if(snsize >= 1000 && snsize < 1000000){
-            this.LZW_size = String.valueOf((double)snsize/1000.0*10/10) + "Kb";
+            this.LZW_size = String.valueOf((double)snsize/1000.0) + "Kb";
         } else if(snsize >= 1000000){
             this.LZW_size = String.valueOf((double)snsize/1000000.0) + "Mb";
         }

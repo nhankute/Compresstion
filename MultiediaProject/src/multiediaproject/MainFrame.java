@@ -97,6 +97,9 @@ public class MainFrame extends javax.swing.JFrame {
 
         btCompression.setText("Compression");
         btCompression.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btCompressionMousePressed(evt);
+            }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btCompressionMouseClicked(evt);
             }
@@ -167,6 +170,9 @@ public class MainFrame extends javax.swing.JFrame {
         lbImg.setToolTipText("");
         lbImg.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         lbImg.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                lbImgMousePressed(evt);
+            }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lbImgMouseClicked(evt);
             }
@@ -261,9 +267,11 @@ public class MainFrame extends javax.swing.JFrame {
             } catch (IOException ex) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
+                this.lbImg.setText("Done");
                 Compress.setVisible(true);//show compress
                 this.img = null;
                 this.input_text = "";
+                this.lbImg.setText(this.IMAGE_VIEW);
         }
         else if (img == null){//choose file
             JFileChooser chooser = new JFileChooser();
@@ -341,9 +349,11 @@ public class MainFrame extends javax.swing.JFrame {
                 } catch (IOException ex) {
                     Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                this.lbImg.setText("Done");
                 Compress.setVisible(true);//show compress
                 this.img = null;
                 this.input_text = "";
+                this.lbImg.setText(this.IMAGE_VIEW);
         }
         else if (img == null){//choose file
             final JDialog dialog = new AndroidLikeToast(MainFrame.this, true, "Sir, Please choose some image first");
@@ -378,6 +388,7 @@ public class MainFrame extends javax.swing.JFrame {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
             }   
         }
+        
     }//GEN-LAST:event_btCompressionMouseClicked
 
     private void btSelecTextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btSelecTextMouseClicked
@@ -485,7 +496,7 @@ public class MainFrame extends javax.swing.JFrame {
                     this.lbImg.setText(this.IMAGE_VIEW);
                 }
             }
-            else {
+            else {//Choo file again
                 System.out.println("It's NOT a text");
                 final JDialog dialog = new AndroidLikeToast(MainFrame.this, true, "Please choose a text of type \"*.txt\"");
                 Timer timer = new Timer(AndroidLikeToast.LENGTH_SHORT, new ActionListener() {
@@ -502,7 +513,7 @@ public class MainFrame extends javax.swing.JFrame {
                 dialog.setVisible(true);
             }
         }
-        else if(result == JFileChooser.CANCEL_OPTION) {
+        else if(result == JFileChooser.CANCEL_OPTION) {//Not choose anything
             System.out.println("No file selec");
         }
     }//GEN-LAST:event_btDecompressMouseClicked
@@ -515,6 +526,14 @@ public class MainFrame extends javax.swing.JFrame {
         TextFileChooser = null;
         this.lbImg.setIcon(null);
     }//GEN-LAST:event_btRefreshMouseClicked
+
+    private void lbImgMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbImgMousePressed
+        this.lbImg.setText("Processing !!!");
+    }//GEN-LAST:event_lbImgMousePressed
+
+    private void btCompressionMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCompressionMousePressed
+        this.lbImg.setText("Processing !!!");
+    }//GEN-LAST:event_btCompressionMousePressed
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
