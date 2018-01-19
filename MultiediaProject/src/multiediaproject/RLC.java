@@ -16,7 +16,7 @@ public class RLC {
     public RLC(String str){
         super();
         this.originalString = str;
-        this.compressResult = "";
+        this.compressResult = "R";
         
         this.compressString();
     }
@@ -31,11 +31,14 @@ public class RLC {
                 compressResult += String.valueOf(count);
                 compressResult += "-";
                 compressResult += temp;
-                compressResult += ".";
+                compressResult += " ";
                 temp = c;
+                count = 1;
             }
         }
-        compressResult = compressResult.substring(0, compressResult.length() - 1);
+        compressResult += String.valueOf(count);
+        compressResult += "-";
+        compressResult += temp;
         System.out.println(compressResult);
     }
     

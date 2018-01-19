@@ -96,12 +96,10 @@ class ShannonFano {
         
         @Override
 	public String toString() {
-            String str = "";
-            
+            String str = "S";
+            int count = 0;
             for (Character c : compressedResult.keySet()) {
-                if (c == '\n')
-                    str += "\\n";
-                else str += c;
+                str += c;
                 str += "-" + compressedResult.get(c) + "\n";
             }
             System.out.print(str);
@@ -109,12 +107,13 @@ class ShannonFano {
             for (Character c : originalString.toCharArray()) {
                 result += this.compressedResult.get(c);
             }
-            System.out.println(result);
             while (result.length() % 8 != 0){
+                count++;
                 result = "0" + result;
             }
+            System.out.println(String.valueOf(count) + result);
             result = convertBinaryStringToString(result);
-            str += result;
+            str += String.valueOf(count) + result;
             return str;
         }
 

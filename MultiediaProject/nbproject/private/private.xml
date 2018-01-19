@@ -3,9 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/nhan-kute/NetBeansProjects/MultiediaProject/src/multiediaproject/MainFrame.java</file>
-            <file>file:/home/nhan-kute/NetBeansProjects/MultiediaProject/src/multiediaproject/ResultCompressText.java</file>
-            <file>file:/home/nhan-kute/NetBeansProjects/MultiediaProject/src/multiediaproject/ShannonFano.java</file>
+            <file>file:/home/nhan-kute/NetBeansProjects/Compresstion/MultiediaProject/src/multiediaproject/MainFrame.java</file>
+            <file>file:/home/nhan-kute/NetBeansProjects/Compresstion/MultiediaProject/src/multiediaproject/Decompress.java</file>
+            <file>file:/home/nhan-kute/NetBeansProjects/Compresstion/MultiediaProject/src/multiediaproject/RLC.java</file>
         </group>
     </open-files>
 </project-private>

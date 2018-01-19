@@ -14,7 +14,9 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.StringJoiner;
 import java.util.ArrayList;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
+import javax.swing.plaf.basic.BasicProgressBarUI;
 
 public class ResultCompressTextFrame extends javax.swing.JFrame {
     private static final String DELIMITER = "#";
@@ -23,7 +25,7 @@ public class ResultCompressTextFrame extends javax.swing.JFrame {
     private String input_text;
     
     private String percentage_Shannon = "";
-    private String percentage_Huffman = "0";
+    private String percentage_Huffman = "";
     private String percentage_RLC = "";
     private String percentage_LZW = "0";
     
@@ -53,8 +55,8 @@ public class ResultCompressTextFrame extends javax.swing.JFrame {
         if(this.percentage_Huffman != "")
         if(Double.parseDouble(this.percentage_Huffman) >= 90){
             this.pgb_Huffman.setForeground(Color.RED);
-        }else if(Double.parseDouble(this.percentage_Huffman) > 55 && Integer.parseInt(this.percentage_Huffman) < 90){
-            this.pgb_Huffman.setForeground(Color.YELLOW);
+        }else if(Double.parseDouble(this.percentage_Huffman) > 55 && Double.parseDouble(this.percentage_Huffman) < 90){
+            this.pgb_Huffman.setForeground(Color.ORANGE);
         }else{
             this.pgb_Huffman.setForeground(Color.GREEN);
         }
@@ -62,8 +64,8 @@ public class ResultCompressTextFrame extends javax.swing.JFrame {
         if(this.percentage_LZW != "")
         if(Double.parseDouble(this.percentage_LZW) >= 90){
             this.pgb_LZW.setForeground(Color.RED);
-        }else if(Double.parseDouble(this.percentage_LZW) > 55 && Integer.parseInt(this.percentage_LZW) < 90){
-            this.pgb_LZW.setForeground(Color.YELLOW);
+        }else if(Double.parseDouble(this.percentage_LZW) > 55 && Double.parseDouble(this.percentage_LZW) < 90){
+            this.pgb_LZW.setForeground(Color.ORANGE);
         }else{
             this.pgb_LZW.setForeground(Color.GREEN);
         }
@@ -71,8 +73,8 @@ public class ResultCompressTextFrame extends javax.swing.JFrame {
         if(this.percentage_Shannon != "")
         if(Double.parseDouble(this.percentage_Shannon) >= 90){
             this.pgb_Shannon.setForeground(Color.RED);
-        }else if(Double.parseDouble(this.percentage_Shannon) > 55 && Integer.parseInt(this.percentage_Shannon) < 90){
-            this.pgb_Shannon.setForeground(Color.YELLOW);
+        }else if(Double.parseDouble(this.percentage_Shannon) > 55 && Double.parseDouble(this.percentage_Shannon) < 90){
+            this.pgb_Shannon.setForeground(Color.ORANGE);
         }else{
             this.pgb_Shannon.setForeground(Color.GREEN);
         }
@@ -80,8 +82,9 @@ public class ResultCompressTextFrame extends javax.swing.JFrame {
         if(this.percentage_RLC != "")
         if(Double.parseDouble(this.percentage_RLC) >= 90){
             this.pgb_RLC.setForeground(Color.RED);
-        }else if(Double.parseDouble(this.percentage_RLC) > 55 && Integer.parseInt(this.percentage_RLC) < 90){
-            this.pgb_RLC.setForeground(Color.YELLOW);
+            
+        }else if(Double.parseDouble(this.percentage_RLC) > 55 && Double.parseDouble(this.percentage_RLC) < 90){
+            this.pgb_RLC.setForeground(Color.ORANGE);
         }else{
             this.pgb_RLC.setForeground(Color.GREEN);
         }
@@ -430,9 +433,45 @@ public class ResultCompressTextFrame extends javax.swing.JFrame {
             this.RLC_size = String.valueOf((double)snsize/1000000.0) + "Mb";
         }
 //Huffman
- 
+        output = new File(CurrenDirection +"_Huffman_compressed.txt");
+        fos = new FileOutputStream(output);
+        
+        Huffman huffman = new Huffman(input);
+        data = huffman.toString().getBytes();
+        fos.write(data);
+        fos.flush();
+        fos.close();
+        
+        this.huffman_size = String.valueOf(output.length());
+        snsize = Double.parseDouble(this.huffman_size);
+        this.percentage_Huffman = String.valueOf(Math.round(((snsize*100.0) / (double)this.original_size) *100) / 100.00);
+        if(snsize < 1000.0){
+            this.huffman_size += "bytes";
+        } else if(snsize >= 1000 && snsize < 1000000){
+            this.huffman_size = String.valueOf((double)snsize/1000.0*10/10) + "Kb";
+        } else if(snsize >= 1000000){
+            this.huffman_size = String.valueOf((double)snsize/1000000.0) + "Mb";
+        }
 //LZW
-
+        output = new File(CurrenDirection +"_Huffman_compressed.txt");
+        fos = new FileOutputStream(output);
+        
+        LZW lzw = new LZW(input);
+        data = lzw.toString().getBytes();
+        fos.write(data);
+        fos.flush();
+        fos.close();
+        
+        this.LZW_size = String.valueOf(output.length());
+        snsize = Double.parseDouble(this.LZW_size);
+        this.percentage_LZW = String.valueOf(Math.round(((snsize*100.0) / (double)this.original_size) *100) / 100.00);
+        if(snsize < 1000.0){
+            this.LZW_size += "bytes";
+        } else if(snsize >= 1000 && snsize < 1000000){
+            this.LZW_size = String.valueOf((double)snsize/1000.0*10/10) + "Kb";
+        } else if(snsize >= 1000000){
+            this.LZW_size = String.valueOf((double)snsize/1000000.0) + "Mb";
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

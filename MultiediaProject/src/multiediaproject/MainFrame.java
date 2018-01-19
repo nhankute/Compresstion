@@ -161,7 +161,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        lbImg.setFont(new java.awt.Font("Ubuntu", 0, 36)); // NOI18N
+        lbImg.setFont(new java.awt.Font("Ubuntu", 0, 30)); // NOI18N
         lbImg.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbImg.setText(this.IMAGE_VIEW);
         lbImg.setToolTipText("");
@@ -243,8 +243,12 @@ public class MainFrame extends javax.swing.JFrame {
         if (this.IMAGE_VIEW.substring(0, 14).equals("Ready to compr")){// compress text
                 try {//get text from file to String input_text
                     Scanner sc = new Scanner(this.TextFileChooser);
-                    while (sc.hasNext()) {
+                    boolean loop = sc.hasNextLine();
+                    while (loop) {
                       this.input_text += sc.nextLine();
+                      if(sc.hasNext()){
+                          this.input_text += "\n";
+                      }else loop = false;
                     }
                     sc.close();
                   } catch(IOException e) {
@@ -319,8 +323,12 @@ public class MainFrame extends javax.swing.JFrame {
         if (this.IMAGE_VIEW.substring(0, 14).equals("Ready to compr")){// compress text
                 try {//get text from file to String input_text
                     Scanner sc = new Scanner(this.TextFileChooser);
-                    while (sc.hasNext()) {
+                    boolean loop = sc.hasNextLine();
+                    while (loop) {
                       this.input_text += sc.nextLine();
+                      if(sc.hasNext()){
+                          this.input_text += "\n";
+                      }else loop = false;
                     }
                     sc.close();
                   } catch(IOException e) {
@@ -328,11 +336,11 @@ public class MainFrame extends javax.swing.JFrame {
                   }
                 //start compress
                 ResultCompressTextFrame Compress = null;
-            try {
-                Compress = new ResultCompressTextFrame(this.input_text, this.TextFileChooser.getName(), (int) this.TextFileChooser.length());
-            } catch (IOException ex) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                try {
+                    Compress = new ResultCompressTextFrame(this.input_text, this.TextFileChooser.getName(), (int) this.TextFileChooser.length());
+                } catch (IOException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 Compress.setVisible(true);//show compress
                 this.img = null;
                 this.input_text = "";
@@ -431,12 +439,51 @@ public class MainFrame extends javax.swing.JFrame {
             String mimetype= new MimetypesFileTypeMap().getContentType(file_selected);
             String type = mimetype.split("/")[0];
             
-            if(type.equals("text")){ 
+            if(type.equals("text")){//get text file 
                 System.out.println("And you got a text");
                 String path = file_selected.getAbsolutePath();
-                this.IMAGE_VIEW = "Ready to decompress text file: " + file_selected.getName();
-                this.TextFileChooser = file_selected;
-                this.lbImg.setText(this.IMAGE_VIEW);
+                //get text from file to String input_text
+                try {
+                    Scanner sc = new Scanner(file_selected);
+                    boolean loop = sc.hasNextLine();
+                    while (loop) {
+                      this.input_text += sc.nextLine();
+                      if(sc.hasNextLine()){
+                          this.input_text += "\n";
+                      }else loop = false;
+                    }
+                    sc.close();
+                  } catch(IOException e) {
+                    System.out.println(e);
+                  }
+                //strart to decompress
+                Decompress decode = new Decompress(this.input_text);
+                if(decode.toString() != "Sir, we can't decode this file"){
+                    File output;
+                    FileOutputStream fos;
+                    String NewName = file_selected.getName().substring(0,file_selected.getName().length() - 4) + decode.getType() + ".txt";
+                    byte[] data = decode.toString().getBytes();
+                    output = new File(NewName);
+                    try {
+                        fos = new FileOutputStream(output);
+                        fos.write(data);
+                        fos.flush();
+                        fos.close();
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+
+                    this.IMAGE_VIEW = "Result decode :" + NewName;
+                    this.TextFileChooser = file_selected;
+                    this.lbImg.setText(this.IMAGE_VIEW + "\r\nNew size: " + decode.toString().length());
+                }
+                else{
+                    this.IMAGE_VIEW = decode.toString();
+                    this.lbImg.setText(this.IMAGE_VIEW);
+                }
             }
             else {
                 System.out.println("It's NOT a text");
