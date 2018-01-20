@@ -2,10 +2,14 @@ package multiediaproject;
 
 import java.awt.Color;
 import java.awt.List;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -444,7 +448,7 @@ public class ResultCompressTextFrame extends javax.swing.JFrame {
         fos = new FileOutputStream(output);
         
         Huffman huffman = new Huffman(input);
-        data = huffman.toString().getBytes();
+        data = huffman.toString().getBytes(Charset.forName("UTF-8"));
         //this.convert = huffman.toString();
         fos.write(data);
         fos.flush();

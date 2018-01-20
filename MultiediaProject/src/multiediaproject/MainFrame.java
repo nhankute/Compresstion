@@ -5,6 +5,7 @@
  */
 package multiediaproject;
 
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -20,7 +21,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -382,23 +387,9 @@ public class MainFrame extends javax.swing.JFrame {
  
                 dialog.setVisible(true);
         }
-        else{//compress image
-            BufferedImage bi = new BufferedImage(img.getWidth(null),img.getHeight(null),BufferedImage.BITMASK);
-            Graphics bg = bi.getGraphics();
-            bg.drawImage(img, 0, 0, null);
-            bg.dispose();
-            
-            LosslessCompressionAlgorithms firstCompress = new LosslessCompressionAlgorithms(bi);
-            //firstCompress.Compress();
-            
-            try {
-                File f = new File("first.png");
-                ImageIO.write(firstCompress.Compress(), "PNG", f);
-                System.out.println(String.valueOf(f.length()/2048));
-                JOptionPane.showMessageDialog(MainFrame.this, String.valueOf(f.length()/2048000) + "Mb", "New Size",JOptionPane.PLAIN_MESSAGE);
-            } catch (IOException ex) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-            }   
+        else{Component frame;
+//compress image
+             JOptionPane.showMessageDialog(null, "Sorry!! We not support it yet");
         }
         
     }//GEN-LAST:event_btCompressionMouseClicked
@@ -465,26 +456,24 @@ public class MainFrame extends javax.swing.JFrame {
             
             if(type.equals("text")){//get text file 
                 System.out.println("And you got a text");
-                String path = file_selected.getAbsolutePath();
-                
-                //
-                /*
+                String pathh = file_selected.getAbsolutePath();
+               /*
+                short numS = 0;
+                Path path = Paths.get(file_selected.getName());
+                byte[] byteArray;
                 try {
-                    FileInputStream inputFile = new FileInputStream(path);
-                    int content;
-			while ((content = inputFile.read()) != -1) {
-				// convert to char and display it
-				this.input_text += String.valueOf((char)content);
-			}
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    byteArray = Files.readAllBytes(path);
+                    ByteBuffer bbuffer = ByteBuffer.wrap(byteArray);
+                    numS = bbuffer.getShort();
+
                 } catch (IOException ex) {
                     Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                } 
-                */              
-                //
+                }
+                this.input_text = String.valueOf(numS);
+                */
                 try {
                     Scanner sc = new Scanner(file_selected);
+                    int i =0;
                     while (sc.hasNextLine()) {
                         this.input_text += sc.nextLine();
                         if(sc.hasNextLine())
@@ -494,7 +483,7 @@ public class MainFrame extends javax.swing.JFrame {
                   } catch(IOException e) {
                     System.out.println(e);
                   }
-                
+               
                 //strart to decompress
                 Decompress decode = new Decompress(this.input_text);
                 if(decode.toString() != "Sir, we can't decode this file"){
