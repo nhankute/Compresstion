@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.Vector;
 import static multiediaproject.Huffman.convertBinaryStringToString;
 
@@ -12,7 +16,8 @@ public class LZW {
 	private String originalString;
 	private Vector<Integer> out;
 	private int originalStringLength;
-	private HashMap<String , Integer> Result;
+	private Map<String , Integer> Result;
+	private Map<Integer , String> Result2;
 	private HashMap<Character, Integer  > Count_Char;
 	private HashMap<String , Integer>     Count1_Char;
 	/*private HashMap<String , Integer>     Count1_Char;*/
@@ -23,6 +28,7 @@ public class LZW {
 		Count_Char		= new HashMap<Character, Integer  >();
 		Count1_Char		= new HashMap<String , Integer>();
 		Result			= new HashMap<String , Integer>();
+		Result2			= new HashMap<Integer , String>();
 		out			= new Vector<Integer>();
 		this.DictToString();
 	}
@@ -67,24 +73,31 @@ public class LZW {
 		String result = "";
 		Iterator<Integer> itr = out.iterator();
 		while(itr.hasNext()){
-			result += " " + Integer.toString(itr.next());
+			result += "-" + Integer.toString(itr.next());
 		}
-		
 		result = result.substring(1,result.length());
 		this.ResultString = result;
+                
+		Map<Integer, String> temp = new HashMap<Integer, String>();
+                for(String c : Result.keySet()){
+                    temp.put(Result.get(c), c);
+                }
+                Map<Integer , String> sorted = new TreeMap<>(temp);
+                Result.clear();
+                this.Result2 = sorted;
 	}
         
         @Override
 	public String toString(){
             String str = "L";
-            for(String c : Result.keySet()){
-                str += c;
+            str += this.ResultString;
+            for(Integer c : Result2.keySet()){
+                str += " ";
+                str += String.valueOf(c);
                 str += "-";
-                str += String.valueOf(Result.get(c));
-                str += "\n";
+                str += Result2.get(c);
             }
             System.out.println(str + this.ResultString);
-            str += this.ResultString;
             return str;
 	}
 

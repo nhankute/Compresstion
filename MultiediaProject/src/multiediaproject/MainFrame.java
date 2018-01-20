@@ -10,13 +10,21 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.activation.MimetypesFileTypeMap;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
@@ -38,6 +46,7 @@ public class MainFrame extends javax.swing.JFrame {
     private String IMAGE_VIEW;
     private File[] AfterCompress;
     private File TextFileChooser;
+    private String convert = "";
     
     public MainFrame() {
         img =  null;
@@ -264,6 +273,7 @@ public class MainFrame extends javax.swing.JFrame {
                 ResultCompressTextFrame Compress = null;
             try {
                 Compress = new ResultCompressTextFrame(this.input_text, this.TextFileChooser.getName(), (int) this.TextFileChooser.length());
+                this.convert = Compress.GetToConvert();
             } catch (IOException ex) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -333,7 +343,7 @@ public class MainFrame extends javax.swing.JFrame {
                 try {//get text from file to String input_text
                     Scanner sc = new Scanner(this.TextFileChooser);
                     boolean loop = sc.hasNextLine();
-                    while (loop) {
+                    while (loop) {  
                       this.input_text += sc.nextLine();
                       if(sc.hasNext()){
                           this.input_text += "\n";
@@ -347,6 +357,7 @@ public class MainFrame extends javax.swing.JFrame {
                 ResultCompressTextFrame Compress = null;
                 try {
                     Compress = new ResultCompressTextFrame(this.input_text, this.TextFileChooser.getName(), (int) this.TextFileChooser.length());
+                    this.convert = Compress.GetToConvert();
                 } catch (IOException ex) {
                     Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -442,7 +453,7 @@ public class MainFrame extends javax.swing.JFrame {
         this.lbImg.setText(this.IMAGE_VIEW);
         JFileChooser chooser = new JFileChooser();
         chooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("*.Text","txt");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("*.bin","txt");
         chooser.addChoosableFileFilter(filter);
         
         int result = chooser.showOpenDialog(null);
@@ -455,26 +466,41 @@ public class MainFrame extends javax.swing.JFrame {
             if(type.equals("text")){//get text file 
                 System.out.println("And you got a text");
                 String path = file_selected.getAbsolutePath();
-                //get text from file to String input_text
+                
+                //
+                /*
+                try {
+                    FileInputStream inputFile = new FileInputStream(path);
+                    int content;
+			while ((content = inputFile.read()) != -1) {
+				// convert to char and display it
+				this.input_text += String.valueOf((char)content);
+			}
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } 
+                */              
+                //
                 try {
                     Scanner sc = new Scanner(file_selected);
-                    boolean loop = sc.hasNextLine();
-                    while (loop) {
-                      this.input_text += sc.nextLine();
-                      if(sc.hasNextLine()){
-                          this.input_text += "\n";
-                      }else loop = false;
+                    while (sc.hasNextLine()) {
+                        this.input_text += sc.nextLine();
+                        if(sc.hasNextLine())
+                            this.input_text += "\n";
                     }
                     sc.close();
                   } catch(IOException e) {
                     System.out.println(e);
                   }
+                
                 //strart to decompress
                 Decompress decode = new Decompress(this.input_text);
                 if(decode.toString() != "Sir, we can't decode this file"){
                     File output;
                     FileOutputStream fos;
-                    String NewName = decode.getType() + "_Decode_" + file_selected.getName();
+                    String NewName = decode.getType() + "_Decode_" + file_selected.getName().substring(0,file_selected.getName().length() - 4) + ".txt";
                     byte[] data = decode.toString().getBytes();
                     System.out.println("\nDecode :" + decode.toString());
                     output = new File(NewName);
@@ -540,6 +566,15 @@ public class MainFrame extends javax.swing.JFrame {
         this.lbImg.setText("Processing !!!");
     }//GEN-LAST:event_btCompressionMousePressed
 
+    public static boolean hasNonWordCharacter(String s) {
+        char[] a = s.toCharArray();
+        for (char c : a) {
+            if (!Character.isLetter(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btCompression;

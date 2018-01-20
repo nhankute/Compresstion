@@ -12,7 +12,6 @@ public class Huffman {
 	private HashMap<Character, String   > Result;
 	private HashMap<Character, Integer  > Count_Char;
 	private HashMap<String , Integer>     Count1_Char;
-	/*private HashMap<Integer  , Character> Invert_Count_Char;*/
 	
 	public Huffman(String str) {
 		originalString 		= str;
@@ -151,11 +150,11 @@ public class Huffman {
         }
         
         
-        /*
+        
         public String getCodeDecoded(String encode){
             String BinaryCode = encode.split(" ",2)[0];
             String TableCode = encode.split(" ",2)[1];
-            if(TableCode.charAt(1)!='-'){
+            while(TableCode.charAt(1)!='-'){
                 BinaryCode += " " +TableCode.split(" ",2)[0];
                 TableCode = TableCode.split(" ",2)[1];
             }
@@ -207,5 +206,22 @@ public class Huffman {
 			}		
 		}
 		return str;
-	}*/
+	}
+        
+        
+    public static String convertStringToBinaryString(String string){
+            String sb = "";
+            String str = "";
+            for(Character c : string.toCharArray()){
+                sb += Integer.toBinaryString((int) c);
+                while(sb.length()%8 != 0){
+                    sb = "0" + sb;
+                }
+                str += sb;
+                sb = "";
+            }
+            return str;
+        }
+        
+        
 }

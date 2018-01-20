@@ -62,8 +62,10 @@ public class Decompress {
             case 'S':
                 Type_compress += "Shannon";
                 encode = encode.substring(1);
-		String BinaryCode = encode.split(" ",2)[0];
-                String TableCode = encode.split(" ",2)[1];
+		String BinaryCode;
+                BinaryCode= encode.split(" ",2)[0];
+                String TableCode;
+                TableCode= encode.split(" ",2)[1];
                 while(TableCode.charAt(1)!='-'){
                     BinaryCode += " " +TableCode.split(" ",2)[0];
                     TableCode = TableCode.split(" ",2)[1];
@@ -103,7 +105,8 @@ public class Decompress {
                 temp = new StringBuffer(temp).reverse().toString();
                 buffer.put(temp, TableCode.charAt(0));
 
-                String Binary = convertStringToBinaryString(BinaryCode);
+                String Binary;
+                Binary = convertStringToBinaryString(BinaryCode);
 
                 Binary = Binary.substring(count);
                     str = "";
@@ -118,6 +121,24 @@ public class Decompress {
                 break;
             case 'L':
                 Type_compress += "LZW";
+                encode = encode.substring(1);
+                BinaryCode = encode.split(" ",2)[0];
+                TableCode = encode.split(" ",2)[1];
+                
+                Turn = true;
+                HashMap<Integer , String> bufferLZW = new HashMap<Integer , String>();
+                String tempKey = "";
+                String tempValue = "";
+                Character cc;
+                for(String i : BinaryCode.split("-")){
+                    int LzwCode = Integer.parseInt(i);
+                    bufferLZW.put(LzwCode, TableCode.substring(String.valueOf(LzwCode).length() + 2 + TableCode.indexOf(" " + String.valueOf(i) + "-"), TableCode.indexOf(" " + String.valueOf(LzwCode+1) + "-")));
+                }
+                for(String i : BinaryCode.split("-")){
+                    str += bufferLZW.get(Integer.parseInt(i));
+		}
+                
+                
                 break;
             case 'H':
                 Type_compress += "Huffman";

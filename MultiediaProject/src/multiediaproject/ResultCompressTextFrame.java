@@ -35,6 +35,8 @@ public class ResultCompressTextFrame extends javax.swing.JFrame {
     private String RLC_size;
     private String LZW_size;
     
+    private String convert;
+    
     public ResultCompressTextFrame(String input_text, String file_name, int file_size) throws IOException {
         this.input_text = input_text;
         this.file_name = file_name;
@@ -388,6 +390,11 @@ public class ResultCompressTextFrame extends javax.swing.JFrame {
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     }//GEN-LAST:event_formWindowClosing
     
+    //Debug
+    public String GetToConvert(){
+        return this.convert;
+    }
+    
     private void Compress(String input, String file_name) throws IOException{
         File output;
         FileOutputStream fos;
@@ -438,6 +445,7 @@ public class ResultCompressTextFrame extends javax.swing.JFrame {
         
         Huffman huffman = new Huffman(input);
         data = huffman.toString().getBytes();
+        //this.convert = huffman.toString();
         fos.write(data);
         fos.flush();
         fos.close();
